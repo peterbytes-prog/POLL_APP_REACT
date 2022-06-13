@@ -1,7 +1,16 @@
 .App {
   text-align: center;
 }
-
+.choice {
+  width:90%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+.choice > div:nth-child(2){
+  width: 100%;
+  border-radius: 1.5em;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

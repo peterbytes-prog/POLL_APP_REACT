@@ -1,9 +1,11 @@
 import React from 'react';
 import PollMediaCard from './pollcard';
 import { NavLink } from 'react-router-dom';
+import {Container } from 'reactstrap';
+import CategoryDropDown from './../category/side_list';
 
 
-function PollListPage({polls}){
+function PollListPage({polls, categories=[]}){
   const polls_list = polls.map(function(poll){
     console.log(poll)
     return(
@@ -12,26 +14,24 @@ function PollListPage({polls}){
       </li>
     )
   })
-  return(<div>
-
-            <div className='jumbotron'>
-              <div className='row'>
-                <div className='col-sm-12 col-md-6 text-left'>
-                  <h1>HomePage</h1>
-                </div>
-                <div className='col-sm-12 col-md-6 text-sm-left text-md-right'>
-                  <NavLink className='btn btn-dark' to='/'>CREATE POLL</NavLink>
+  return(
+          <Container>
+            <div className='row'>
+              <div className='col-sm-12 col-md-4'>
+                <Container className='text-left'>
+                  <p className='h4'>Categories</p>
+                  { categories.map((category)=><CategoryDropDown category={category}/>)}
+                </Container>
+              </div>
+              <div className='col-sm-12 col-md-8'>
+                <div className='container'>
+                  <ul className='list-group'>
+                    { polls_list }
+                  </ul>
                 </div>
               </div>
-
             </div>
-            <div className='container'>
-              <ul className='list-group'>
-                { polls_list }
-              </ul>
-            </div>
-
-          </div>)
+          </Container>)
 }
 
 export default PollListPage;

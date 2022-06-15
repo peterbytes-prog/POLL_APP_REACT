@@ -4,6 +4,12 @@
   --theme-three: #43760f; /*yellow-green*/
   --theme-four:  #01112a; /*darkblue*/
 }
+/* .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+} */
 .bg-theme-one{
   background-color: var(--theme-one);
   background: var(--theme-one);
@@ -23,6 +29,10 @@
 .jumbotron.home{
   background: var(--theme-two);
   color: var(--theme-four);
+}
+.jumbotron.create{
+  background: var(--theme-three);
+  color:white;
 }
 
 .border-theme-one{

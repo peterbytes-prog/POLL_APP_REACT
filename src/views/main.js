@@ -7,9 +7,10 @@ import HomePage from './home';
 import PollListPage from './poll/list';
 import SignInPage from './user/login';
 import SignUpPage from './user/signup';
-import { connect } from 'react-redux';
-
+import CreatePollPage from './poll/create';
 import PollDetailPage from './poll/detail';
+
+import { connect } from 'react-redux';
 // const POLLS = [];
 // const USERS = [];
 const mapStateToProps = state =>{
@@ -274,14 +275,15 @@ class Main extends Component{
     return(
       <div>
         <Header />
-        <Switch>
-          <Route exact path='/' component={()=> <HomePage polls={this.props.polls} categories={this.props.categories}/>} />
-          <Route exact path='/polls' component={()=> <PollListPage polls={this.props.polls}  categories={this.props.categories}/>} />
-          <Route path='/polls/:pollId' component={ PollDetail } />
-          <Route path='/signin' component={ SignInPage } />
-          <Route path='/signup' component={ SignUpPage } />
-          <Redirect to='/' />
-        </Switch>
+          <Switch>
+            <Route exact path='/' component={()=> <HomePage polls={this.props.polls} categories={this.props.categories}/>} />
+            <Route exact path='/polls' component={()=> <PollListPage polls={this.props.polls}  categories={this.props.categories}/>} />
+            <Route exact path='/polls/create' component={ () => <CreatePollPage categories={this.props.categories} /> } />
+            <Route path='/polls/:pollId' component={ PollDetail } />
+            <Route path='/signin' component={ SignInPage } />
+            <Route path='/signup' component={ SignUpPage } />
+            <Redirect to='/' />
+          </Switch>
         <Footer />
       </div>
     )

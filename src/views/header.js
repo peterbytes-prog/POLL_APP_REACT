@@ -50,7 +50,9 @@ class Header extends Component {
                     </NavLink>
                   </DropdownItem>
                   <DropdownItem>
-                    Poll
+                    <NavLink to='/polls/create'>
+                      Poll
+                    </NavLink>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

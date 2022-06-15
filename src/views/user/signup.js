@@ -72,7 +72,7 @@ class SignUpPage extends Component{
       }
     }
     if(this.state.touched.password2){
-      if(this.state.password2 != this.state.password1){
+      if(this.state.password2 !== this.state.password1){
         errors['password2'] = "password doesn't matched"
       }
     }

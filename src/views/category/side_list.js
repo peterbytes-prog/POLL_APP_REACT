@@ -21,19 +21,19 @@ class CategoryDropDown extends Component{
   constructDropDown(category){
     if(category.subCategories.length){
       return (
-        <NavLink to={`/polls/category/:${category.id}`} style={{textAlign:'left'}} key={category.id} className='ml-4 page-link'>
+        <NavLink to={`/polls/category/:${category.id}`} style={{textAlign:'left'}} key={category.id} className='ml-4 page-link category-link'>
           >  {category.name}{category.subCategories.map((cat)=>this.constructDropDown(cat))}
         </NavLink>)
     }else{
         return (
-          <NavLink to={`/polls/category/:${category.id}`} style={{textAlign:'left'}} className='ml-2 page-link' key={category.id}>- {category.name}</NavLink>
+          <NavLink to={`/polls/category/:${category.id}`} style={{textAlign:'left'}} className='ml-2 page-link category-link' key={category.id}>- {category.name}</NavLink>
         );
     }
   }
   render(){
     const subcategory = this.props.category.subCategories;
     return(
-      <NavLink className='page-link' to={`/polls/category/:${this.props.category.id}`} style={{textAlign:'left'}} key={this.props.category.id}>
+      <NavLink className='page-link category-link' to={`/polls/category/:${this.props.category.id}`} style={{textAlign:'left'}} key={this.props.category.id}>
         > {this.props.category.name}{this.props.category.subCategories.map((cat)=>this.constructDropDown(cat))}
       </NavLink>
     )

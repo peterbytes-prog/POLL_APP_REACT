@@ -15,7 +15,7 @@ function HomePage({polls, categories}){
 
   return (
         <Container>
-        <div className='jumbotron'>
+        <div className='home jumbotron'>
           <div className='row'>
             <div className='col-sm-12 col-md-6 text-left'>
               <h1>Poll Simple</h1>
@@ -27,9 +27,9 @@ function HomePage({polls, categories}){
 
         </div>
           <div className='row'>
-            <div className='col-sm-12 col-md-4'>
-              <Container className='text-left'>
-                <p className='h4'>Categories</p>
+            <div className='col-sm-12 col-md-4 bg-light'>
+              <Container className='text-left '>
+                <p className='h4 text-theme-four'>Categories</p>
                 { categories.map((category)=><CategoryDropDown category={category}/>)}
               </Container>
             </div>

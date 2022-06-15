@@ -5,6 +5,8 @@ import Footer from './footer';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import HomePage from './home';
 import PollListPage from './poll/list';
+import SignInPage from './user/login';
+import SignUpPage from './user/signup';
 import { connect } from 'react-redux';
 
 import PollDetailPage from './poll/detail';
@@ -273,10 +275,12 @@ class Main extends Component{
       <div>
         <Header />
         <Switch>
-          <Route path='/home' component={()=> <HomePage polls={this.props.polls} categories={this.props.categories}/>} />
+          <Route exact path='/' component={()=> <HomePage polls={this.props.polls} categories={this.props.categories}/>} />
           <Route exact path='/polls' component={()=> <PollListPage polls={this.props.polls}  categories={this.props.categories}/>} />
           <Route path='/polls/:pollId' component={ PollDetail } />
-          <Redirect to='/home' />
+          <Route path='/signin' component={ SignInPage } />
+          <Route path='/signup' component={ SignUpPage } />
+          <Redirect to='/' />
         </Switch>
         <Footer />
       </div>

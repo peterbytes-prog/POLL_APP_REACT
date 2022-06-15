@@ -29,7 +29,7 @@ class Header extends Component {
   render(){
     return (
       <div>
-        <Navbar color='light' light expand="md" className="mb-5">
+        <Navbar  dark expand="md" className="mb-5 bg-theme-four">
           <NavbarBrand href="/"> Poll Simple</NavbarBrand>
           <NavbarToggler onClick={()=> this.toggle() } />
           <Collapse isOpen={ this.state.isOpen } navbar>
@@ -45,7 +45,9 @@ class Header extends Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Account
+                    <NavLink to='/signup'>
+                      Account
+                    </NavLink>
                   </DropdownItem>
                   <DropdownItem>
                     Poll
@@ -61,7 +63,9 @@ class Header extends Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Sign In
+                    <NavLink to='/signin'>
+                      Sign In
+                    </NavLink>
                   </DropdownItem>
                   <DropdownItem>
                     Sign Out

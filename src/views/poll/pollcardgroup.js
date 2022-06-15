@@ -5,7 +5,7 @@ import PollMediaCard from './pollcard';
 
 function RenderCardPolls({polls, limits}){
   const poll_cards = polls.map((poll)=>{
-    return (<Card style={{border:'none', minWidth:'15rem'}} className='m-1 ' key={poll._id['$oid']}>
+    return (<Card style={{border:'none', minWidth:'15rem'}} className='m-1' key={poll._id['$oid']}>
               <PollMediaCard poll={poll}/>
             </Card>)
   })

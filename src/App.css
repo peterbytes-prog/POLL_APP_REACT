@@ -1,3 +1,65 @@
+:root {
+  --theme-one: #4f1916; /*brown*/
+  --theme-two:  #6bb7ca; /*light-blue*/
+  --theme-three: #43760f; /*yellow-green*/
+  --theme-four:  #01112a; /*darkblue*/
+}
+.bg-theme-one{
+  background-color: var(--theme-one);
+  background: var(--theme-one);
+}
+.bg-theme-two{
+  background-color: var(--theme-two);
+  background: var(--theme-two);
+}
+.bg-theme-three{
+  background-color: var(--theme-three);
+  background: var(--theme-three);
+}
+.bg-theme-four{
+  background-color: var(--theme-four);
+  background: var(--theme-four);
+}
+.jumbotron.home{
+  background: var(--theme-two);
+  color: var(--theme-four);
+}
+
+.border-theme-one{
+  border-color: var(--theme-one);
+}
+.border-theme-two{
+  border-color: var(--theme-two);
+}
+.border-theme-three{
+  border-color: var(--theme-three);
+}
+.border-theme-four{
+  border-color: var(--theme-four);
+}
+
+.text-theme-one{
+  color: var(--theme-one);
+}
+.text-theme-two{
+  color: var(--theme-two);
+}
+.text-theme-three{
+  color: var(--theme-three);
+}
+.text-theme-four{
+  color: var(--theme-four);
+}
+.page-link.category-link{
+  color: var(--theme-one);
+}
+
+.poll-detail{
+  border-width: thick;
+  border: 1px solid var(--theme-two);
+  border-radius: 1rem;
+}
+
 .App {
   text-align: center;
 }

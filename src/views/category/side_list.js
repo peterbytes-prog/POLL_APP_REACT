@@ -5,6 +5,7 @@ DropdownToggle,
 DropdownMenu} from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
+
 class CategoryDropDown extends Component{
   constructor(props){
     super(props);
@@ -31,6 +32,7 @@ class CategoryDropDown extends Component{
     }
   }
   render(){
+
     const subcategory = this.props.category.subCategories;
     return(
       <NavLink className='page-link category-link' to={`/polls/category/${this.props.category._id}`} style={{textAlign:'left'}} key={this.props.category.id}>

@@ -5,6 +5,7 @@ import PollMediaCard from './pollcard';
 import { Link } from 'react-router-dom';
 import RenderCardPolls from './pollcardgroup';
 import { getCategoryParentFromTree } from '../../logic.js';
+import Loading from '../loading';
 
 
 
@@ -25,8 +26,11 @@ function RenderChoice({votes, choice, onVote}){
     </li>
   )
 }
-function PollDetailPage({polls, pollId, onVote, categories}){
+function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsErrMess}){
 
+  if (pollsLoading || polls.length==0){
+    return <Loading />
+  }
   let poll = polls.filter((poll)=>poll._id['$oid'] === pollId);
   poll = poll.length > 0 ? poll[0] : null;
   const votes = poll ? poll.choices.reduce((prev, cur)=>prev + cur.votes.length, 0) : 0;

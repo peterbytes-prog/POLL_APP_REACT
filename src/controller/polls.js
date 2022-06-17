@@ -1,10 +1,9 @@
-import { POLLS } from '../shared/polls';
+// import { POLLS } from '../shared/polls';
 import * as ActionTypes from './actiontypes';
 
 const resolveAddPoll = (state, payload) => {
-  console.log('payload',payload);
   const { userId, question_text, choice_text, category } = payload;
-  const q_id = (state.length).toString();
+  const q_id = (state.polls.length).toString();
   const new_poll = {
   "_id": {
     "$oid": q_id
@@ -35,7 +34,7 @@ const resolveAddPoll = (state, payload) => {
 }
 const resolveAddVote = (state, payload) =>{
   const { userId, choice } = payload;
-  let questions = state;
+  let questions = state.polls;
   let choiceInd = null;
   let questionInd = null;
   for (let q in questions){
@@ -69,18 +68,27 @@ const resolveAddVote = (state, payload) =>{
     // console.log(questions);
     return questions
   }else{
-    return state
+    return questions
   }
 }
-export const Polls = (state = POLLS, action) =>{
+export const Polls = (state = {
+  isLoading: false,
+  errMess: null,
+  polls: []
+}, action) =>{
   switch (action.type) {
+    case (ActionTypes.FETCHED_POLLS):
+      return { ...state, isLoading:false, errMess:null, polls:action.payload}
+    case (ActionTypes.FECTH_POLL_LOADING):
+      return { ...state, isLoading:true, errMess:null, polls:[]};
+    case (ActionTypes.FECTH_POLL_FAILED):
+      return { ...state, isLoading:false, errMess:action.payload, polls:[]}
     case (ActionTypes.ADD_VOTE):
       const resolvedvote = resolveAddVote(state, action.payload);
-      return [].concat(resolvedvote)
+      return { ...state, polls:resolvedvote}
     case (ActionTypes.ADD_POLL):
-    console.log('b4', action.payload );
-      const resolvedpoll = resolveAddPoll(state, action.payload);
-      return state.concat(resolvedpoll)
+      const resolvedpoll = state.polls.concat(resolveAddPoll(state, action.payload));
+      return { ...state, polls:resolvedpoll}
     default:
       return state;
   }

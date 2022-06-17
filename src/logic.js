@@ -1,5 +1,4 @@
 export const getCategoryParentFromNode = (node, findId) => {
-  console.log(node['_id'] ,findId,node['_id'] === findId)
   let ref = []
   if (node['_id'] === findId){
     return [{'_id': node['_id'], 'name':node['name']}]

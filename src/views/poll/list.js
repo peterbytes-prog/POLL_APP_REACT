@@ -4,9 +4,10 @@ import { NavLink } from 'react-router-dom';
 import {Container } from 'reactstrap';
 import CategoryDropDown from './../category/side_list';
 import { getCategoryParentFromTree } from '../../logic.js';
+import Loading from '../loading';
 
 
-function PollListPage({polls, categories}){
+function PollListPage({polls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
   const polls_list = polls.map(function(poll){
     return(
       <li style={{ border: 'none'}}className='list-group-item my-1' key={poll._id['$oid']}>
@@ -14,21 +15,31 @@ function PollListPage({polls, categories}){
       </li>
     )
   })
+
   return(
           <Container>
             <div className='row'>
               <div className='col-sm-12 col-md-4'>
                 <Container className='text-left'>
                   <p className='h4'>Categories</p>
-                  { categories.map((category)=><CategoryDropDown category={category}/>)}
+                  {categoriesLoading?(
+                      <Loading />
+                  ):(
+                      categories.map((category)=><CategoryDropDown categoriesLoading={categoriesLoading} category={category}/>)
+                  )}
                 </Container>
               </div>
               <div className='col-sm-12 col-md-8'>
-                <div className='container'>
-                  <ul className='list-group'>
-                    { polls_list.length>0? (polls_list):(<p>No Poll Found</p>) }
-                  </ul>
-                </div>
+                { pollsLoading ?(
+                      <Loading className='my-5'/>
+                    ):(
+                      <div className='container'>
+                        <ul className='list-group'>
+                          { polls_list.length>0? (polls_list):(<p>No Poll Found</p>) }
+                        </ul>
+                      </div>
+                    )
+                }
               </div>
             </div>
           </Container>)

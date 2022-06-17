@@ -1,4 +1,6 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+// import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 // import { Reducer, initialState } from './reducer';
 import { Polls } from './polls';
 import { Users } from './users';
@@ -9,6 +11,6 @@ export const ConfigureStore = () =>{
     polls: Polls,
     categories: Categories,
     users: Users
-  }));
+  }), applyMiddleware(thunk));
   return store;
 }

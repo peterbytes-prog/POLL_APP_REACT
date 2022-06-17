@@ -1,9 +1,17 @@
 import React from 'react';
-import { Media } from 'reactstrap';
-import {NavLink} from 'react-router-dom';
-function PollMediaCard({poll}){
-  // {/* <NavLink to='/home'> */}
-    // {/* </NavLink > */}
+import { Media, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Link, NavLink } from 'react-router-dom';
+import { getCategoryParentFromTree } from '../../logic.js';
+
+function PollMediaCard({poll, categories}){
+
+  const categoryParentsList = getCategoryParentFromTree({findId:poll.categoryid['$oid'], categories:categories})
+                                .map((category)=>{
+                                        return (<BreadcrumbItem>
+                                          <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
+                                        </BreadcrumbItem>)
+                                      });
+
   return (
 
       <Media className=' p-2 poll-detail'>
@@ -17,7 +25,14 @@ function PollMediaCard({poll}){
             <span className='text py-0'>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(poll.date)))}</span>
           </div>
           <br></br>
-          <p className='text-left'>IN: <NavLink className='text-theme-one' to='polls/politics'>Politics</NavLink> > <NavLink className='text-theme-one' to='polls/politics/conservatism'>Conservatism </NavLink> </p>
+          <div className='ctext-left'>
+              <Breadcrumb listTag="div">
+                <BreadcrumbItem>
+                  <p className='p-0 m-0'>IN:</p>
+                </BreadcrumbItem>
+                { categoryParentsList }
+              </Breadcrumb>
+          </div>
           <NavLink style={{ 'textDecoration':'none'}} className="text-theme-four" to={`/polls/${poll._id['$oid']}`} >
                 <Media heading>
                   <div  className='text-left'>

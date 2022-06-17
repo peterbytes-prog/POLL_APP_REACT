@@ -1,49 +1,54 @@
-const POLLS = [{
-  "_id": {
-    "$oid": "62a57ef296907d4e09c65252"
-  },
-  "question_text": "Morning",
-  date: "2013-12-02T17:57:28.556094Z",
-  "userid": {
-    '_id': "62a5a17b1197d32f13894b26",
-    'username': 'John Doe'
-  },
-  "choices": [
-    {
-      "choice_text": "Yes",
-      "questionid": {
-        "$oid": "62a57ef296907d4e09c65252"
-      },
-      "_id": {
-        "$oid": "62a57ef296907d4e09c65254"
-      },
-      "votes": []
+export const POLLS = [
+{
+"_id": {
+  "$oid": "62a57ef296907d4e09c65252"
+},
+"question_text": "Morning",
+date: "2013-12-02T17:57:28.556094Z",
+"userid": {
+  '_id': "62a5a17b1197d32f13894b26",
+  'username': 'John Doe'
+},
+"categoryid": {
+  "$oid": 4
+},
+"choices": [
+  {
+    "choice_text": "Yes",
+    "questionid": {
+      "$oid": "62a57ef296907d4e09c65252"
     },
-    {
-      "choice_text": "No",
-      "questionid": {
-        "$oid": "62a57ef296907d4e09c65252"
-      },
-      "_id": {
-        "$oid": "62a57ef296907d4e09c65255"
-      },
-      "votes": [
-        {
-          "userid": {
-            "$oid": "62a59dd7161d4d86cbd3ae00"
-          },
-          "choiceid": {
-            "$oid": "62a57ef296907d4e09c65255"
-          },
-          "_id": {
-            "$oid": "62a5a2021197d32f13894b32"
-          }
+    "_id": {
+      "$oid": "62a57ef296907d4e09c65254"
+    },
+    "votes": []
+  },
+  {
+    "choice_text": "No",
+    "questionid": {
+      "$oid": "62a57ef296907d4e09c65252"
+    },
+    "_id": {
+      "$oid": "62a57ef296907d4e09c65255"
+    },
+    "votes": [
+      {
+        "userid": {
+          "$oid": "62a59dd7161d4d86cbd3ae00"
+        },
+        "choiceid": {
+          "$oid": "62a57ef296907d4e09c65255"
+        },
+        "_id": {
+          "$oid": "62a5a2021197d32f13894b32"
         }
-      ]
-    }
-  ],
-  "__v": 1
-},{
+      }
+    ]
+  }
+],
+"__v": 1
+},
+{
   "_id": {
     "$oid": "62a5a17b1197d32f13894b20"
   },
@@ -52,6 +57,9 @@ const POLLS = [{
   "userid": {
     '_id': "62a5a17b1197d32f13894b20",
     'username': 'Jerry Pumba'
+  },
+  "categoryid": {
+    "$oid": 7
   },
   "choices": [
     {
@@ -86,6 +94,9 @@ const POLLS = [{
   "userid": {
     '_id': "62a5a17b1197d32f13894b26",
     'username': 'Janet Jackson'
+  },
+  "categoryid": {
+    "$oid": 12
   },
   "choices": [
     {
@@ -181,4 +192,3 @@ const POLLS = [{
   "__v": 1
 }
 ];
-export default POLLS;

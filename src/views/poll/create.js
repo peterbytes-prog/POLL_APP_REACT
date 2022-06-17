@@ -8,6 +8,7 @@ import {
   Input,
   Button,
 } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import { LocalForm, Control, Errors } from 'react-redux-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faAdd } from '@fortawesome/free-solid-svg-icons'
@@ -22,15 +23,27 @@ class CreatePollPage extends Component{
     this.ChoiceForm = this.ChoiceForm.bind(this);
     this.removeChoice = this.removeChoice.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
+      success:false,
       choice_text:["", ""],
+      category: null,
       categories: [this.props.categories],
 
     }
     this.arr = [];
   }
   handleSubmit(values){
-    alert(JSON.stringify(values))
+    const choice_text = this.state.choice_text.filter((choice)=>choice.length>=1);
+    const question_text = values.question_text;
+    this.props.onCreatePoll(1,question_text, choice_text, this.state.category);
+    this.setState({
+      success: true
+    })
+
+    // alert(JSON.stringify(values))
+
+
   }
   ChoiceForm({deletable, value, ind}){
     const handleInput = (e) =>{
@@ -115,10 +128,14 @@ class CreatePollPage extends Component{
       _categories.push(_selected.subCategories);
     }
     this.setState({
-      categories:   _categories
+      categories:   _categories,
+      category: _selected
     });
   }
   render(){
+    if(this.state.success){
+      return <Redirect to='/polls' />
+    }
     const ChoiceForm = this.ChoiceForm;
     const choiceForms = this.state.choice_text.map((text, ind)=>{
       let deletable = false;

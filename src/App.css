@@ -79,6 +79,10 @@
   display: flex;
   flex-direction: row;
 }
+a.category-link.active, a.category-link.active *{
+  background: lightblue;
+  border-color: var(--theme-one);
+}
 .choice > div:nth-child(2){
   width: 100%;
   border-radius: 1.5em;

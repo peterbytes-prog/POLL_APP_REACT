@@ -3,14 +3,14 @@ import PollMediaCard from './pollcard';
 import { NavLink } from 'react-router-dom';
 import {Container } from 'reactstrap';
 import CategoryDropDown from './../category/side_list';
+import { getCategoryParentFromTree } from '../../logic.js';
 
 
-function PollListPage({polls, categories=[]}){
+function PollListPage({polls, categories}){
   const polls_list = polls.map(function(poll){
-    console.log(poll)
     return(
       <li style={{ border: 'none'}}className='list-group-item my-1' key={poll._id['$oid']}>
-        <PollMediaCard poll={poll}/>
+        <PollMediaCard poll={poll} categories={categories}/>
       </li>
     )
   })
@@ -26,7 +26,7 @@ function PollListPage({polls, categories=[]}){
               <div className='col-sm-12 col-md-8'>
                 <div className='container'>
                   <ul className='list-group'>
-                    { polls_list }
+                    { polls_list.length>0? (polls_list):(<p>No Poll Found</p>) }
                   </ul>
                 </div>
               </div>

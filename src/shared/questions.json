@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "62a57ef296907d4e09c65252"
+  },
+  "question_text": "Morning",
+  "userid": {
+    "$oid": "62a57e8096907d4e09c6524d"
+  },
+  "choices": [
+    {
+      "choice_text": "Yes",
+      "questionid": {
+        "$oid": "62a57ef296907d4e09c65252"
+      },
+      "_id": {
+        "$oid": "62a57ef296907d4e09c65254"
+      },
+      "votes": []
+    },
+    {
+      "choice_text": "No",
+      "questionid": {
+        "$oid": "62a57ef296907d4e09c65252"
+      },
+      "_id": {
+        "$oid": "62a57ef296907d4e09c65255"
+      },
+      "votes": [
+        {
+          "userid": {
+            "$oid": "62a59dd7161d4d86cbd3ae00"
+          },
+          "choiceid": {
+            "$oid": "62a57ef296907d4e09c65255"
+          },
+          "_id": {
+            "$oid": "62a5a2021197d32f13894b32"
+          }
+        }
+      ]
+    }
+  ],
+  "__v": 1
+},{
+  "_id": {
+    "$oid": "62a5a17b1197d32f13894b20"
+  },
+  "question_text": "Size of Hydrogen Atom",
+  "userid": {
+    "$oid": "62a59dd7161d4d86cbd3ae00"
+  },
+  "choices": [
+    {
+      "choice_text": "1.01",
+      "questionid": {
+        "$oid": "62a5a17b1197d32f13894b20"
+      },
+      "_id": {
+        "$oid": "62a5a17b1197d32f13894b22"
+      },
+      "votes": []
+    },
+    {
+      "choice_text": "1.9E-39",
+      "questionid": {
+        "$oid": "62a5a17b1197d32f13894b20"
+      },
+      "_id": {
+        "$oid": "62a5a17b1197d32f13894b23"
+      },
+      "votes": []
+    }
+  ],
+  "__v": 1
+}]

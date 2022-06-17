@@ -4,12 +4,13 @@ import { Card, CardImg, CardText, CardBody,
 import PollMediaCard from './pollcard';
 import { Link } from 'react-router-dom';
 import RenderCardPolls from './pollcardgroup';
+import { getCategoryParentFromTree } from '../../logic.js';
 
 
 
 function RenderChoice({votes, choice, onVote}){
   const handleVote = () =>{
-    onVote(choice);
+    onVote(1, choice);
   }
   return (
     <li style={{border:'none'}} className='list-group-item' >
@@ -24,7 +25,7 @@ function RenderChoice({votes, choice, onVote}){
     </li>
   )
 }
-function PollDetailPage({polls, pollId, onVote}){
+function PollDetailPage({polls, pollId, onVote, categories}){
 
   let poll = polls.filter((poll)=>poll._id['$oid'] === pollId);
   poll = poll.length > 0 ? poll[0] : null;
@@ -36,11 +37,14 @@ function PollDetailPage({polls, pollId, onVote}){
   const otherPolls = polls.filter((poll,ind)=>{
     if(ind!== pollIndex){ return poll}
   });
-  const pollUserSuggestion = polls.filter((poll,ind)=>{
-    if(ind!== pollIndex){
-     return poll
-    }
-  });
+  const pollUserSuggestion = polls.filter((_poll,ind)=> ((poll.userid.username  === _poll.userid.username)&&( ind !== pollIndex)))
+
+  const categoryParentsList = getCategoryParentFromTree({findId:poll.categoryid['$oid'], categories:categories})
+                                .map((category)=>{
+                                        return (<BreadcrumbItem>
+                                          <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
+                                        </BreadcrumbItem>)
+                                      });
 
   return (
         <Container>
@@ -48,14 +52,9 @@ function PollDetailPage({polls, pollId, onVote}){
         <div>
             <Breadcrumb listTag="div">
               <BreadcrumbItem>
-                <Link to='/'>Categories</Link>
+                <p className='p-0 m-0'>Categories</p>
               </BreadcrumbItem>
-              <BreadcrumbItem>
-                <Link to='/'>Politics</Link>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <Link to='/'>Conservatism</Link>
-              </BreadcrumbItem>
+              { categoryParentsList }
               <BreadcrumbItem>
                 {pollId}
               </BreadcrumbItem>
@@ -87,7 +86,7 @@ function PollDetailPage({polls, pollId, onVote}){
                 <Container>
                 <br></br>
                   <p className='h5 text-left'>More By {poll.userid.username}</p>
-                  <RenderCardPolls polls={ pollUserSuggestion } />
+                  <RenderCardPolls polls={ pollUserSuggestion } categories = { categories}/>
                   <hr/>
                 </Container>
               ):(null)}
@@ -95,7 +94,7 @@ function PollDetailPage({polls, pollId, onVote}){
                 <Container>
                 <br></br>
                   <p className='h5 text-secondary text-left'>Suggested Polls</p>
-                  <RenderCardPolls polls={ otherPolls } />
+                  <RenderCardPolls polls={ otherPolls } categories = { categories} />
                 </Container>
               ):(null)}
 

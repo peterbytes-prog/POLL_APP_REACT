@@ -9,6 +9,8 @@ import SignInPage from './user/login';
 import SignUpPage from './user/signup';
 import CreatePollPage from './poll/create';
 import PollDetailPage from './poll/detail';
+import { addVote, addPoll } from '../controller/actioncreators';
+
 
 import { connect } from 'react-redux';
 // const POLLS = [];
@@ -20,6 +22,39 @@ const mapStateToProps = state =>{
     categories: state.categories
   }
 }
+const mapDispatchToProps = dispatch => ({
+  onVote: (userId, choice) => dispatch(addVote(userId, choice)),
+  onCreatePoll: ( userId, question_text, choice_text,category ) => dispatch(addPoll(userId, question_text, choice_text, category))
+})
+function depthFirst2(cat){
+  let ref =[];
+  cat.subCategories = cat.subCategories || []
+  if (cat._id){
+      ref.push(cat._id)
+  }
+  for(let other_category of cat.subCategories){
+    ref =ref.concat(depthFirst2(other_category))
+  }
+  return ref
+}
+function depthFirst(cat, _find, ind=0, found=null){
+  let ref = [];
+  cat.subCategories = cat.subCategories || []
+  if (cat._id){
+    if( cat._id == _find){
+      found = cat
+      ref.push(cat._id)
+      return {'found':found, 'ref':ref}
+    }
+    ref.push(cat._id)
+  }
+  for(let other_category of cat.subCategories){
+    let res = depthFirst(other_category, _find, ind+1, found);
+    ref.push(res.ref)
+    found = res.found
+  }
+  return {'found':found, 'ref':ref}
+}
 class Main extends Component{
   constructor(props){
     super(props);
@@ -28,41 +63,8 @@ class Main extends Component{
     //   users: [],
     //   categories:[]
     // }
-    this.onVote = this.onVote.bind(this);
   }
-  onVote(choice){
-    let questions = this.props.polls;
-    const questionid = choice.questionid['$oid'];
-    const choiceid = choice._id['$oid'];
-    const new_vote = {
-      "userid": {
-        "$oid": "62a59dd7161d4d86cbd3ae00"
-      },
-      "choiceid": {
-        "$oid": choiceid
-      },
-      "_id": {
-        "$oid": "62a5a2021197d32f13894b00"
-      }
-    };
-    let q = this.props.polls.filter((poll)=> poll._id['$oid'] === questionid);
 
-    if(q.length>=0){
-      const questionInd = this.props.polls.indexOf(q[0]);
-      let question = q[0];
-      let c = question.choices.filter((choice)=>choice._id['$oid'] === choiceid);
-      if(c.length>=0){
-        let choiceInd = question.choices.indexOf(c[0]);
-        let choice =c[0];
-        choice.votes.push(new_vote);
-        question.choices[choiceInd] = choice;
-        questions[questionInd] = question;
-        this.setState({
-          polls:questions
-        })
-      }
-    }
-  }
   // componentDidMount(){
   //   this.setState({
   //     polls: [
@@ -270,7 +272,20 @@ class Main extends Component{
 
   render(){
     const PollDetail = ({ match })=>{
-      return <PollDetailPage polls={this.props.polls} pollId={match.params.pollId} onVote={this.onVote}/>
+      return <PollDetailPage polls={this.props.polls} pollId={match.params.pollId} onVote={this.props.onVote} categories={this.props.categories}/>
+    }
+    const PollCategory = ({ match }) =>{
+
+      let group = [];
+      for(let category of this.props.categories){
+        let {found, ref} = depthFirst(category,parseInt(match.params.categoryid), 0, null);
+        if(found){
+          group = depthFirst2(found);
+          break;
+        }
+      }
+      let polls = this.props.polls.filter((poll)=>group.includes(parseInt(poll.categoryid['$oid'])));
+      return <PollListPage  polls={polls} categories={this.props.categories} />
     }
     return(
       <div>
@@ -278,10 +293,11 @@ class Main extends Component{
           <Switch>
             <Route exact path='/' component={()=> <HomePage polls={this.props.polls} categories={this.props.categories}/>} />
             <Route exact path='/polls' component={()=> <PollListPage polls={this.props.polls}  categories={this.props.categories}/>} />
-            <Route exact path='/polls/create' component={ () => <CreatePollPage categories={this.props.categories} /> } />
-            <Route path='/polls/:pollId' component={ PollDetail } />
-            <Route path='/signin' component={ SignInPage } />
-            <Route path='/signup' component={ SignUpPage } />
+            <Route exact path='/polls/create' component={ () => <CreatePollPage onCreatePoll={this.props.onCreatePoll} categories={this.props.categories} /> } />
+            <Route path='/polls/category/:categoryid' component={ PollCategory } />
+            <Route  path='/polls/:pollId' component={ PollDetail } />
+            <Route exact path='/signin' component={ SignInPage } />
+            <Route exact path='/signup' component={ SignUpPage } />
             <Redirect to='/' />
           </Switch>
         <Footer />
@@ -290,5 +306,12 @@ class Main extends Component{
   }
 }
 
+    // "react-redux-form": "^1.16.9",
+    // "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    // "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    // "@fortawesome/react-fontawesome": "^0.1.18",
 
-export default withRouter(connect(mapStateToProps)(Main));
+    // "@testing-library/jest-dom": "^5.16.4",
+    // "@testing-library/react": "^13.3.0",
+    // "@testing-library/user-event": "^13.5.0",
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

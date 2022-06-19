@@ -10,7 +10,7 @@ import SignUpPage from './user/signup';
 import CreatePollPage from './poll/create';
 import Loading from './loading';
 import PollDetailPage from './poll/detail';
-import { addVote, addPoll, fecthPolls, fecthCategories } from '../controller/actioncreators';
+import { addVote, addPoll, fecthPolls, fecthCategories, logoutUser, loginUser, signupUser } from '../controller/actioncreators';
 
 
 import { connect } from 'react-redux';
@@ -19,15 +19,19 @@ import { connect } from 'react-redux';
 const mapStateToProps = state =>{
   return {
     polls:state.polls,
-    users:state.users,
-    categories: state.categories
+    user:state.user,
+    categories: state.categories,
+    signup: state.signup
   }
 }
 const mapDispatchToProps = dispatch => ({
   onVote: (userId, choice) => dispatch(addVote(userId, choice)),
   onCreatePoll: ( userId, question_text, choice_text,category ) => dispatch(addPoll(userId, question_text, choice_text, category)),
   fecthPolls: () => { dispatch(fecthPolls()) },
-  fecthCategories: () => { dispatch(fecthCategories())}
+  fecthCategories: () => { dispatch(fecthCategories())},
+  logoutUser: () => { dispatch(logoutUser())},
+  loginUser: (creds) => { dispatch(loginUser(creds))},
+  signupUser: (creds) => { dispatch(signupUser(creds))}
 })
 function depthFirst2(cat){
   let ref =[];
@@ -71,7 +75,14 @@ class Main extends Component{
 
   }
   render(){
-
+    const LoginRedirect = () => {
+      console.log(this.props.user.isAuthenticated)
+      if(!this.props.user.isAuthenticated){
+        return <SignInPage loginUser = { this.props.loginUser } logoutUser={this.props.logoutUser} />
+      }else{
+        return <Redirect to='/' />
+      }
+    }
     const PollDetail = ({ match })=>{
       return (<PollDetailPage
                 polls={this.props.polls.polls}
@@ -86,13 +97,13 @@ class Main extends Component{
 
       let group = [];
       for(let category of this.props.categories.categories){
-        let {found, ref} = depthFirst(category,parseInt(match.params.categoryid), 0, null);
+        let {found, ref} = depthFirst(category,match.params.categoryid, 0, null);
         if(found){
           group = depthFirst2(found);
           break;
         }
       }
-      let polls = this.props.polls.polls.filter((poll)=>group.includes(parseInt(poll.categoryid['$oid'])));
+      let polls = this.props.polls.polls.filter((poll)=>group.includes(poll.category._id));
       return <PollListPage
                   polls={polls}
                   pollsLoading = {this.props.polls.isLoading}
@@ -102,9 +113,11 @@ class Main extends Component{
                   categoriesLoading = {this.props.categories.isLoading}
               />
     }
+    console.log(this.props.user )
     return(
+
       <div>
-        <Header />
+        <Header user={ this.props.user } logoutUser = {this.props.logoutUser} />
           <Switch>
             <Route exact path='/' component={()=> <HomePage
                                                             polls={this.props.polls.polls}
@@ -129,8 +142,8 @@ class Main extends Component{
             <Route exact path='/polls/create' component={ () => <CreatePollPage onCreatePoll={this.props.onCreatePoll} categories={this.props.categories.categories} /> } />
             <Route path='/polls/category/:categoryid' component={ PollCategory } />
             <Route  path='/polls/:pollId' component={ PollDetail } />
-            <Route exact path='/signin' component={ SignInPage } />
-            <Route exact path='/signup' component={ SignUpPage } />
+            <Route exact path='/signin' component={ LoginRedirect  } />
+            <Route exact path='/signup' component={ ()=><SignUpPage signupUser={ this.props.signupUser } signup={ this.props.signup } /> } />
             <Redirect to='/' />
           </Switch>
         <Footer />

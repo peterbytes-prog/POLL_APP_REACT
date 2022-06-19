@@ -20,10 +20,10 @@ class CategoryDropDown extends Component{
     }));
   }
   constructDropDown(category){
-    if(category.subCategories.length){
+    if(category.subcategories.length){
       return (
         <NavLink to={`/polls/category/${category._id}`} style={{textAlign:'left'}} key={category.id} className='ml-4 page-link category-link'>
-          >  {category.name}{category.subCategories.map((cat)=>this.constructDropDown(cat))}
+          >  {category.name}{category.subcategories.map((cat)=>this.constructDropDown(cat))}
         </NavLink>)
     }else{
         return (
@@ -33,10 +33,10 @@ class CategoryDropDown extends Component{
   }
   render(){
 
-    const subcategory = this.props.category.subCategories;
+    const subcategory = this.props.category.subcategories;
     return(
       <NavLink className='page-link category-link' to={`/polls/category/${this.props.category._id}`} style={{textAlign:'left'}} key={this.props.category.id}>
-        > {this.props.category.name}{this.props.category.subCategories.map((cat)=>this.constructDropDown(cat))}
+        > {this.props.category.name}{this.props.category.subcategories.map((cat)=>this.constructDropDown(cat))}
       </NavLink>
     )
   }

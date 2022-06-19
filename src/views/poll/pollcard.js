@@ -5,7 +5,7 @@ import { getCategoryParentFromTree } from '../../logic.js';
 
 function PollMediaCard({poll, categories}){
 
-  const categoryParentsList = getCategoryParentFromTree({findId:poll.categoryid['$oid'], categories:categories})
+  const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
                                         return (<BreadcrumbItem>
                                           <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
@@ -21,8 +21,8 @@ function PollMediaCard({poll, categories}){
         </Media>
         <Media body className='px-2'>
           <div  className='text-left'>
-            <span className='text py-0'>{poll.userid.username}</span><br></br>
-            <span className='text py-0'>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(poll.date)))}</span>
+            <span className='text py-0'>{poll.user.username}</span><br></br>
+            <span className='text py-0'>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(poll.createdAt)))}</span>
           </div>
           <br></br>
           <div className='ctext-left'>
@@ -33,7 +33,7 @@ function PollMediaCard({poll, categories}){
                 { categoryParentsList }
               </Breadcrumb>
           </div>
-          <NavLink style={{ 'textDecoration':'none'}} className="text-theme-four" to={`/polls/${poll._id['$oid']}`} >
+          <NavLink style={{ 'textDecoration':'none'}} className="text-theme-four" to={`/polls/${poll._id}`} >
                 <Media heading>
                   <div  className='text-left'>
                     {poll.question_text}

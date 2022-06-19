@@ -10,7 +10,7 @@ import Loading from '../loading';
 function PollListPage({polls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
   const polls_list = polls.map(function(poll){
     return(
-      <li style={{ border: 'none'}}className='list-group-item my-1' key={poll._id['$oid']}>
+      <li style={{ border: 'none'}}className='list-group-item my-1' key={poll._id}>
         <PollMediaCard poll={poll} categories={categories}/>
       </li>
     )

@@ -8,7 +8,10 @@ class SignInPage extends Component{
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   handleSubmit(event){
-    alert('username: '+this.username.value+" Password: "+this.password.value)
+    this.props.loginUser({
+      username: this.username.value,
+      password: this.password.value
+    })
     event.preventDefault();
   }
   render(){

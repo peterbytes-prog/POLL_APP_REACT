@@ -8,10 +8,13 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@testing-library/jest-dom": "^5.16.4",
     "bootstrap": "^4.6.0",
+    "cross-fetch": "^3.1.5",
+    "fetch": "^1.1.0",
     "install": "^0.13.0",
     "npm": "^8.12.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-fetch": "^0.0.9",
     "react-redux": "^5.1.2",
     "react-redux-form": "^1.16.14",
     "react-router-dom": "^4.2.2",
@@ -23,7 +26,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

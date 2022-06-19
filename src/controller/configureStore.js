@@ -5,12 +5,15 @@ import thunk from 'redux-thunk';
 import { Polls } from './polls';
 import { Users } from './users';
 import { Categories } from './categories';
+import { Auth } from './auth.js'
+import { SignUP } from './signup';
 
 export const ConfigureStore = () =>{
   const store = createStore(combineReducers({
     polls: Polls,
     categories: Categories,
-    users: Users
+    user: Auth,
+    signup: SignUP
   }), applyMiddleware(thunk));
   return store;
 }

@@ -8,7 +8,11 @@ import {
   Input,
   Button,
   FormFeedback,
-  InputGroup
+  InputGroup,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from 'reactstrap';
 
 class SignUpPage extends Component{
@@ -24,11 +28,16 @@ class SignUpPage extends Component{
         email: false,
         password1: false,
         password2: false,
-      }
+      },
+      isOpen: true
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onTouched = this.onTouched.bind(this);
     this.onInput = this.onInput.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+  toggleModal(){
+    this.setState({isOpen:!this.state.isOpen})
   }
   onInput(event){
     this.setState({
@@ -36,18 +45,50 @@ class SignUpPage extends Component{
     })
   }
   handleSubmit(event){
-    alert(
-      `
-      username: ${this.state.username}, email: ${this.state.email}, password1: ${this.state.password1}, password2: ${this.state.password2}
-      `
-    )
     event.preventDefault();
+    const data = {
+      username: this.state.username,
+      password: this.state.password1,
+      email: this.state.email
+    }
+    this.props.signupUser(data);
   }
   onTouched(field){
-    console.log('blur', field)
     this.setState({
       touched: {...this.state.touched, [ field ]: true}
     })
+  }
+  displayModal(){
+    if(this.props.signup.errMess){
+      return (
+        <div>
+          <Modal isOpen={this.state.isOpen } toggle={ this.toggleModal }>
+            <ModalHeader className='bg-danger' toggle={ this.toggleModal }>Sign up Error </ModalHeader>
+            <ModalBody>
+              { this.props.signup.errMess }
+            </ModalBody>
+            <ModalFooter>
+              <Button color="info" onClick={this.toggleModal}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      )
+    }else if(this.props.signup.signedUp){
+      return (
+        <div>
+          <Modal isOpen={this.state.isOpen } toggle={ this.toggleModal }>
+            <ModalHeader className='bg-info' toggle={ this.toggleModal }>Sign up Successful! </ModalHeader>
+            <ModalBody>
+              Account Successful Created, You're ready to login
+            </ModalBody>
+            <ModalFooter>
+              <Button color="info" onClick={this.toggleModal}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      )
+    }
+    return null;
   }
   render(){
     let errors = {
@@ -76,8 +117,10 @@ class SignUpPage extends Component{
         errors['password2'] = "password doesn't matched"
       }
     }
+
     return(
       <Container className="py-3">
+        { this.displayModal() }
         <Form onSubmit={ this.handleSubmit }>
           <FormGroup row>
             <Col sm={12} md={4} className='text-left font-weight-bold'>

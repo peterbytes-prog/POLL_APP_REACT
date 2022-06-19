@@ -31,19 +31,19 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
   if (pollsLoading || polls.length==0){
     return <Loading />
   }
-  let poll = polls.filter((poll)=>poll._id['$oid'] === pollId);
+  let poll = polls.filter((poll)=>poll._id === pollId);
   poll = poll.length > 0 ? poll[0] : null;
   const votes = poll ? poll.choices.reduce((prev, cur)=>prev + cur.votes.length, 0) : 0;
-  const choices = poll ? poll.choices.map((choice) => <RenderChoice key={choice._id['$oid']} votes={votes} choice={choice} onVote={onVote} />) : null;
+  const choices = poll ? poll.choices.map((choice) => <RenderChoice key={choice._id} votes={votes} choice={choice} onVote={onVote} />) : null;
 
   const pollIndex = polls.indexOf(poll);
 
   const otherPolls = polls.filter((poll,ind)=>{
     if(ind!== pollIndex){ return poll}
   });
-  const pollUserSuggestion = polls.filter((_poll,ind)=> ((poll.userid.username  === _poll.userid.username)&&( ind !== pollIndex)))
+  const pollUserSuggestion = polls.filter((_poll,ind)=> ((poll.user.username  === _poll.user.username)&&( ind !== pollIndex)))
 
-  const categoryParentsList = getCategoryParentFromTree({findId:poll.categoryid['$oid'], categories:categories})
+  const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
                                         return (<BreadcrumbItem>
                                           <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
@@ -89,7 +89,7 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
               {pollUserSuggestion.length>0 ?(
                 <Container>
                 <br></br>
-                  <p className='h5 text-left'>More By {poll.userid.username}</p>
+                  <p className='h5 text-left'>More By {poll.user.username}</p>
                   <RenderCardPolls polls={ pollUserSuggestion } categories = { categories}/>
                   <hr/>
                 </Container>

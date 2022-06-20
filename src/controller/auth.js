@@ -15,7 +15,6 @@ export const Auth = (state={
                 isAuthenticated:false,
                 user: action.creds
               }
-      break;
     case ActionTypes.LOGIN_SUCCESS:
       return {...state,
                 isLoading:false,
@@ -24,20 +23,17 @@ export const Auth = (state={
                 user:JSON.parse(localStorage.getItem('creds')),
                 token:action.token
               }
-      break;
     case ActionTypes.LOGIN_FAILED:
       return {...state,
                 isLoading:false,
                 errMess:action.message,
                 isAuthenticated:false
               }
-      break;
     case ActionTypes.LOGOUT_REQUEST:
       return {...state,
                 isLoading:true,
                 isAuthenticated:true
               }
-      break;
     case ActionTypes.LOGOUT_SUCCESS:
       localStorage.clear();
       return {...state,
@@ -47,7 +43,6 @@ export const Auth = (state={
                 token:null,
                 user:null
               }
-      break;
     case ActionTypes.LOGOUT_FAILED:
           break;
     default:

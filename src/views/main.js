@@ -10,7 +10,7 @@ import SignUpPage from './user/signup';
 import CreatePollPage from './poll/create';
 import Loading from './loading';
 import PollDetailPage from './poll/detail';
-import { addVote, addPoll, fecthPolls, fecthCategories, logoutUser, loginUser, signupUser } from '../controller/actioncreators';
+import { createVote, createPoll, fecthPolls, fecthCategories, logoutUser, loginUser, signupUser } from '../controller/actioncreators';
 
 
 import { connect } from 'react-redux';
@@ -25,8 +25,8 @@ const mapStateToProps = state =>{
   }
 }
 const mapDispatchToProps = dispatch => ({
-  onVote: (userId, choice) => dispatch(addVote(userId, choice)),
-  onCreatePoll: ( userId, question_text, choice_text,category ) => dispatch(addPoll(userId, question_text, choice_text, category)),
+  onVote: (pollId, choiceId) => dispatch(createVote(pollId, choiceId)),
+  onCreatePoll: (data) => dispatch(createPoll(data)),
   fecthPolls: () => { dispatch(fecthPolls()) },
   fecthCategories: () => { dispatch(fecthCategories())},
   logoutUser: () => { dispatch(logoutUser())},
@@ -49,7 +49,7 @@ function depthFirst(cat, _find, ind=0, found=null){
   let ref = [];
   cat.subCategories = cat.subCategories || []
   if (cat._id){
-    if( cat._id == _find){
+    if( cat._id === _find){
       found = cat
       ref.push(cat._id)
       return {'found':found, 'ref':ref}
@@ -76,11 +76,18 @@ class Main extends Component{
   }
   render(){
     const LoginRedirect = () => {
-      console.log(this.props.user.isAuthenticated)
       if(!this.props.user.isAuthenticated){
         return <SignInPage loginUser = { this.props.loginUser } logoutUser={this.props.logoutUser} />
       }else{
         return <Redirect to='/' />
+      }
+    }
+    const CreatePollLoginRedirect = () => {
+      if(!this.props.user.isAuthenticated){
+        return <SignInPage loginUser = { this.props.loginUser } logoutUser={this.props.logoutUser} />
+      }else{
+        return <CreatePollPage onCreatePoll={this.props.onCreatePoll} categories={this.props.categories.categories} />
+
       }
     }
     const PollDetail = ({ match })=>{
@@ -93,6 +100,7 @@ class Main extends Component{
                  pollsErrMess = {this.props.polls.errMess}
               />)
     }
+
     const PollCategory = ({ match }) =>{
 
       let group = [];
@@ -113,7 +121,6 @@ class Main extends Component{
                   categoriesLoading = {this.props.categories.isLoading}
               />
     }
-    console.log(this.props.user )
     return(
 
       <div>
@@ -139,7 +146,7 @@ class Main extends Component{
                                                         />
                                                   }
             />
-            <Route exact path='/polls/create' component={ () => <CreatePollPage onCreatePoll={this.props.onCreatePoll} categories={this.props.categories.categories} /> } />
+            <Route exact path='/polls/create' component={ CreatePollLoginRedirect } />
             <Route path='/polls/category/:categoryid' component={ PollCategory } />
             <Route  path='/polls/:pollId' component={ PollDetail } />
             <Route exact path='/signin' component={ LoginRedirect  } />

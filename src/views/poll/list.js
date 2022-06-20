@@ -25,7 +25,7 @@ function PollListPage({polls, pollsLoading, pollsErrMess, categories, categories
                   {categoriesLoading?(
                       <Loading />
                   ):(
-                      categories.map((category)=><CategoryDropDown categoriesLoading={categoriesLoading} category={category}/>)
+                      categories.map((category)=><CategoryDropDown categories={categories} Loading={categoriesLoading} category={category}/>)
                   )}
                 </Container>
               </div>

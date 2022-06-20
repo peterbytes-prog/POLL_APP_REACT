@@ -43,7 +43,7 @@ class Header extends Component {
                 <DropdownToggle className="nav-link" nav caret>
                   Create
                 </DropdownToggle>
-                <DropdownMenu right>
+                <DropdownMenu className='dropdown-menu-right'>
                     {!this.props.user.isAuthenticated?(
                       <DropdownItem>
                         <NavLink to='/signup'>
@@ -65,7 +65,7 @@ class Header extends Component {
                 <DropdownToggle className="nav-link" nav caret>
                   User
                 </DropdownToggle>
-                <DropdownMenu right className='dropdown-menu-right'>
+                <DropdownMenu className='dropdown-menu-right'>
                   {this.props.user.isAuthenticated?(
                     <DropdownItem onClick={ this.props.logoutUser }>
                       {`Hi! ${this.props.user.user.username} Sign Out?`}

@@ -14,7 +14,6 @@ export const SignUP = (state={
         errMess:null,
         signedUp:false
       }
-      break;
     case ActionTypes.SIGNUP_SUCCESS:
       return {
         ...state,
@@ -22,7 +21,6 @@ export const SignUP = (state={
         errMess:null,
         signedUp:true
       }
-      break;
     case ActionTypes.SIGNUP_FAILED:
       return {
         ...state,
@@ -30,7 +28,6 @@ export const SignUP = (state={
         errMess:action.message,
         signedUp:false
       }
-      break;
     default:
       return state
   }

@@ -5,28 +5,108 @@ import { POLLS } from '../shared/polls';
 import { CATEGORIES } from '../shared/categories';
 
 
-export const addVote = (userId, choice) =>{
-  return {
-    type: ActionTypes.ADD_VOTE,
-    payload: {
-      userId: userId,
-      choice: choice
+const createVoteLoading = () =>{
+  return ({
+    type: ActionTypes.REQUEST_VOTE
+  })
+}
+const createVoteFailed = (message) => {
+  return ({
+    type: ActionTypes.REQUEST_VOTE_FAILED,
+    message
+  })
+}
+const createVoteSuccess = (response) => {
+  return ({
+    type: ActionTypes.REQUEST_VOTE_SUCCESS,
+    _id: response._id
+  })
+}
+export const createVote = (pollId, choiceId) => (dispatch) => {
+  dispatch(createVoteLoading());
+  const bearer = 'Bearer '+localStorage.getItem('token');
+  fetch(baseUrl + `polls/${pollId}/choices/${choiceId}`, {
+    method: 'POST',
+    body:JSON.stringify({'confirm':true}),
+    headers:{
+      'Accept': '*/*',
+      'Content-Type': 'application/json',
+      'Authorization': bearer
+    },
+    credentials: "same-origin"
+
+  })
+  .then(response => {
+    if(response.ok){
+      return response
+    }else{
+      let error = new Error('Error '+response.status);
+      error.response = response;
+      throw error;
     }
-  }
+  }, err => {throw err})
+  .then(response => response.json())
+  .then(response => {
+    dispatch(createVoteSuccess(response))
+    fecthPolls()(dispatch)
+  })
+  .catch( err => {
+    dispatch(createVoteFailed(err.message));
+  })
 }
 
-export const addPoll = (userId, question_text, choice_text, category) =>{
-
-  return {
-    type: ActionTypes.ADD_POLL,
-    payload:{
-      userId: userId,
-      question_text: question_text,
-      choice_text: choice_text,
-      category:category
-    }
-  }
+const createPollLoading = () => {
+  return({
+    type:ActionTypes.CREATE_POLL_REQUEST
+  })
 }
+const createPollSuccess = (response) => {
+  return ({
+    type: ActionTypes.CREATE_POLL_SUCCESS,
+    _id: response._id
+  })
+}
+const createPollFailed = (message) => {
+  return ({
+    type: ActionTypes.CREATE_POLL_FAILED,
+    message
+  })
+}
+export const createPoll = (data) => (dispatch) =>{
+  dispatch(createPollLoading());
+  const bearer = 'Bearer '+localStorage.getItem('token');
+  return fetch(baseUrl+'polls', {
+    method: 'POST',
+    body:JSON.stringify(data),
+    headers:{
+      'Accept': '*/*',
+      'Content-Type': 'application/json',
+      'Authorization': bearer
+    },
+    credentials: "same-origin"
+  })
+  .then(response => {
+      if(response.ok){
+        return response
+      }else{
+        let error = new Error('Error '+response.status);
+        error.response = response;
+        throw error;
+      }
+  }, err =>{
+    throw err
+  })
+  .then( response => response.json())
+  .then( response => {
+      dispatch(createPollSuccess(response))
+      fecthPolls()(dispatch)
+    })
+  .catch( err => dispatch(createPollFailed(err.message)))
+}
+
+
+
+
 export const fecthPolls = () => (dispatch) =>{
   dispatch(pollLoading(true));
   fetch(baseUrl + 'polls', {method: 'GET',

@@ -36,6 +36,7 @@ function HomePage({polls, pollsLoading, pollsErrMess, categories, categoriesLoad
                   categories.map((category)=><CategoryDropDown
                                                   key ={category._id}
                                                   categoriesLoading={categoriesLoading}
+                                                  categories = {categories}
                                                   category={category}
                                                 />
                                   )

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardGroup, CardFooter } from 'reactstrap';
+import { Card, CardGroup } from 'reactstrap';
 import PollMediaCard from './pollcard';
 
 

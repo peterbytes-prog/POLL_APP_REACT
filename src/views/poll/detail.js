@@ -1,7 +1,6 @@
 import React from 'react';
-import { Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button, Container, CardGroup, Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import PollMediaCard from './pollcard';
+import { Card, CardTitle, CardBody, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+// import PollMediaCard from './pollcard';
 import { Link } from 'react-router-dom';
 import RenderCardPolls from './pollcardgroup';
 import { getCategoryParentFromTree } from '../../logic.js';
@@ -11,12 +10,12 @@ import Loading from '../loading';
 
 function RenderChoice({votes, choice, onVote}){
   const handleVote = () =>{
-    onVote(1, choice);
+    onVote(choice.question, choice._id);
   }
   return (
     <li style={{border:'none'}} className='list-group-item' >
       <div  className='choice'>
-        <div style={{'border-radius':'50%', width:'3em', height:'3em', 'display':'flex'}} className='mr-2 border border-secondary'>
+        <div style={{'borderRadius':'50%', width:'3em', height:'3em', 'display':'flex'}} className='mr-2 border border-secondary'>
           <p style={{display:'block', margin:'auto'}}>{parseInt((choice.votes.length/votes)*100||0)}%</p>
         </div>
         <div onClick={ handleVote } className='border border-secondary d-flex'>
@@ -28,7 +27,7 @@ function RenderChoice({votes, choice, onVote}){
 }
 function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsErrMess}){
 
-  if (pollsLoading || polls.length==0){
+  if (pollsLoading || polls.length===0){
     return <Loading />
   }
   let poll = polls.filter((poll)=>poll._id === pollId);
@@ -40,12 +39,13 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
 
   const otherPolls = polls.filter((poll,ind)=>{
     if(ind!== pollIndex){ return poll}
+    return null;
   });
   const pollUserSuggestion = polls.filter((_poll,ind)=> ((poll.user.username  === _poll.user.username)&&( ind !== pollIndex)))
 
   const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
-                                        return (<BreadcrumbItem>
+                                        return (<BreadcrumbItem key={category['_id']}>
                                           <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
                                         </BreadcrumbItem>)
                                       });

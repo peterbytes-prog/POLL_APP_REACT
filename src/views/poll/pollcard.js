@@ -7,7 +7,7 @@ function PollMediaCard({poll, categories}){
 
   const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
-                                        return (<BreadcrumbItem>
+                                        return (<BreadcrumbItem key={category['_id']}>
                                           <Link to={`/polls/category/${category['_id']}`}>{category['name']}</Link>
                                         </BreadcrumbItem>)
                                       });

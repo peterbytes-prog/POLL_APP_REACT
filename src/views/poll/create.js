@@ -28,7 +28,7 @@ class CreatePollPage extends Component{
       success:false,
       choice_text:["", ""],
       category: null,
-      categories: [this.props.categories],
+      categories: [this.props.categories.filter((cat)=>!cat.parent)],
 
     }
     this.arr = [];
@@ -36,7 +36,12 @@ class CreatePollPage extends Component{
   handleSubmit(values){
     const choice_text = this.state.choice_text.filter((choice)=>choice.length>=1);
     const question_text = values.question_text;
-    this.props.onCreatePoll(1,question_text, choice_text, this.state.category);
+    let data = {
+      'question_text':question_text,
+      'choices':choice_text,
+      'category':this.state.category._id
+    }
+    this.props.onCreatePoll(data);
     this.setState({
       success: true
     })
@@ -114,7 +119,7 @@ class CreatePollPage extends Component{
     }
     let _selected = false;
     let cats = this.state.categories[ind].map((c)=>{
-      if (c._id === parseInt(val)){
+      if (c._id === val){
         _selected = c;
         return {...c, selected:true}
       }
@@ -123,9 +128,13 @@ class CreatePollPage extends Component{
     let _categories = this.state.categories;
     _categories[ind] = cats;
     _categories  = _categories.filter((content,i)=>i<=ind);
-    if(_selected && _selected.subCategories.length>0){
-
-      _categories.push(_selected.subCategories);
+    if(_selected && _selected.subcategories.length>0){
+      _categories.push(_selected.subcategories.map((c)=>{
+        let nw_sel_obj =  this.props.categories.filter((cat)=>cat._id == c);
+        if(nw_sel_obj.length>0){
+          return nw_sel_obj[0]
+        }
+      }));
     }
     this.setState({
       categories:   _categories,

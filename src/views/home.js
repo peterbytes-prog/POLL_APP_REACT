@@ -9,13 +9,11 @@ import CategoryDropDown from './category/side_list';
 import Loading from './loading';
 
 
-function HomePage({polls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
+function HomePage({recentPolls, popularPolls, trendingPolls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
 
-  const otherPolls = polls.map((poll,ind)=>poll);
-  const pollUserSuggestion = polls.map((poll,ind)=>poll);
 
   return (
-        <Container>
+        <Container className=''>
           <div className='home jumbotron'>
             <div className='row'>
               <div className='col-sm-12 col-md-6 text-left'>
@@ -27,8 +25,8 @@ function HomePage({polls, pollsLoading, pollsErrMess, categories, categoriesLoad
             </div>
           </div>
           <div className='row'>
-            <div className='col-sm-12 col-md-4 bg-light'>
-              <Container className='text-left '>
+            <div className='col-sm-12 col-md-4'>
+              <Container className='text-left'>
                 <p className='h4 text-theme-four'>Categories</p>
                 {categoriesLoading?(
                   <Loading />
@@ -50,21 +48,27 @@ function HomePage({polls, pollsLoading, pollsErrMess, categories, categoriesLoad
               ):(
                 <div className='row'>
                   <div className='col-sm-12'>
-                    {pollUserSuggestion.length>0 ?(
+
+                      <Container>
+                      <br></br>
+                        <p className='h5 text-left'>Trending Polls</p>
+                        <RenderCardPolls polls={trendingPolls} categories={ categories } />
+                        <hr/>
+                      </Container>
+
                       <Container>
                       <br></br>
                         <p className='h5 text-left'>Recent Polls</p>
-                        <RenderCardPolls polls={pollUserSuggestion} categories={ categories } />
+                        <RenderCardPolls polls={recentPolls} categories={ categories } />
                         <hr/>
                       </Container>
-                    ):(null)}
-                    {otherPolls.length>0 ?(
+
                       <Container>
                       <br></br>
-                        <p className='h5 text-secondary text-left'>Suggested Polls</p>
-                        <RenderCardPolls polls={ otherPolls } categories={ categories }/>
+                        <p className='h5 text-secondary text-left'>Popular Polls</p>
+                        <RenderCardPolls polls={ popularPolls } categories={ categories }/>
                       </Container>
-                    ):(null)}
+
 
 
                   </div>

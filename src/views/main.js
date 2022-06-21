@@ -16,6 +16,20 @@ import { createVote, createPoll, fecthPolls, fecthCategories, logoutUser, loginU
 import { connect } from 'react-redux';
 
 
+function trending(polls){
+  const p = polls.slice(0).filter((poll)=>{ return poll.trending; } );
+  return p.splice(0,4)
+}
+function recents(polls){
+  return polls.slice(0).splice(0,4);
+}
+
+function popular(polls){
+  let p = polls.slice(0)
+  p.sort(function(a, b){return b.votes.length - a.votes.length});
+  return p.splice(0,4);
+  }
+
 const mapStateToProps = state =>{
   return {
     polls:state.polls,
@@ -67,9 +81,19 @@ class Main extends Component{
   constructor(props){
     super(props);
   }
+  componentDidUpdate(){
+    console.log(this.props.user)
+    if(! this.props.user.isAuthenticated){
+      return
+    }
+    const tokenExpired = new Date(this.props.user.expiresIn) < Date.now() ;
+    if(tokenExpired){
+      console.log('will logout user');
+      this.props.logoutUser()
+    }
 
+  }
   componentDidMount(){
-
     this.props.fecthCategories();
     this.props.fecthPolls();
 
@@ -98,6 +122,7 @@ class Main extends Component{
                  categories={this.props.categories.categories}
                  pollsLoading = {this.props.polls.isLoading}
                  pollsErrMess = {this.props.polls.errMess}
+                 user = {this.props.user }
               />)
     }
 
@@ -127,7 +152,9 @@ class Main extends Component{
         <Header user={ this.props.user } logoutUser = {this.props.logoutUser} />
           <Switch>
             <Route exact path='/' component={()=> <HomePage
-                                                            polls={this.props.polls.polls}
+                                                            recentPolls = {recents(this.props.polls.polls)}
+                                                            popularPolls = {popular(this.props.polls.polls)}
+                                                            trendingPolls = {trending(this.props.polls.polls)}
                                                             pollsLoading = {this.props.polls.isLoading}
                                                             pollsErrMess = {this.props.polls.errMess}
                                                             categories={this.props.categories.categories}

@@ -14,7 +14,7 @@ function PollMediaCard({poll, categories}){
 
   return (
 
-      <Media className=' p-2 poll-detail'>
+      <Media style={{overflow:'hidden', width:'100%'}} className=' p-2 poll-detail'>
         <Media left>
           <Media className='border rounded-circle border-dark' object src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210728124621/geekslogo.png" alt="cat" style={{width:'2em', height:'2em'}}>
           </Media>
@@ -25,7 +25,7 @@ function PollMediaCard({poll, categories}){
             <span className='text py-0'>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(poll.createdAt)))}</span>
           </div>
           <br></br>
-          <div className='ctext-left'>
+          <div className='text-left'>
               <Breadcrumb listTag="div">
                 <BreadcrumbItem>
                   <p className='p-0 m-0'>IN:</p>
@@ -34,8 +34,8 @@ function PollMediaCard({poll, categories}){
               </Breadcrumb>
           </div>
           <NavLink style={{ 'textDecoration':'none'}} className="text-theme-four" to={`/polls/${poll._id}`} >
-                <Media heading>
-                  <div  className='text-left'>
+                <Media heading  className=''>
+                  <div className="">
                     {poll.question_text}
                   </div>
                 </Media>

@@ -105,8 +105,6 @@ export const createPoll = (data) => (dispatch) =>{
 }
 
 
-
-
 export const fecthPolls = () => (dispatch) =>{
   dispatch(pollLoading(true));
   fetch(baseUrl + 'polls', {method: 'GET',
@@ -117,11 +115,8 @@ export const fecthPolls = () => (dispatch) =>{
       }})
   .then(polls => polls.json())
   .then(polls => {
-      const withVotes = polls.map((poll)=>{
-        poll.votes = poll.choices.map((c)=>c.votes.length).reduce((partialSum, a) => partialSum + a, 0);
-        return poll;
-      })
-      return dispatch(addPolls(withVotes))
+    console.log('polls', polls, polls.length, polls[0])
+      return dispatch(addPolls(polls))
     })
   .catch(err=>dispatch(loadPollsFailed(err.message)))
 }
@@ -220,7 +215,8 @@ export const loginUser = ( creds ) => (dispatch) => {
   .then( response => {
     if( response.success ){
         localStorage.setItem('token', response.token);
-        localStorage.setItem('creds', JSON.stringify(creds));
+        localStorage.setItem('creds', JSON.stringify({...creds, _id:response._id}));
+        localStorage.setItem('expiresIn', new Date(Date.now() + 3600000)); //expires in 1hr
         dispatch(recieveLogin(response));
     }
     else{

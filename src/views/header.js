@@ -12,6 +12,8 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
 
 
 class Header extends Component {
@@ -41,6 +43,7 @@ class Header extends Component {
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle className="nav-link" nav caret>
+                  <FontAwesomeIcon icon={faPlus} />
                   Create
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-right'>
@@ -63,13 +66,20 @@ class Header extends Component {
             <Nav className='ml-auto' navbar>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle className="nav-link" nav caret>
-                  User
+                  <FontAwesomeIcon icon={faUser} />
                 </DropdownToggle>
                 <DropdownMenu className='dropdown-menu-right'>
                   {this.props.user.isAuthenticated?(
+                    <>
                     <DropdownItem onClick={ this.props.logoutUser }>
                       {`Hi! ${this.props.user.user.username} Sign Out?`}
                     </DropdownItem>
+                    <DropdownItem>
+                      <NavLink to='/signin'>
+                        Profile
+                      </NavLink>
+                    </DropdownItem>
+                    </>
                   ):(
                     <DropdownItem>
                       <NavLink to='/signin'>

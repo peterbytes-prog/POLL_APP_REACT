@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import logo from '../logo.png';
 import { NavLink } from 'react-router-dom';
 import {
   Navbar,
@@ -10,10 +11,13 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Form,
+  Input,
+  Button
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faUser, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 
 class Header extends Component {
@@ -29,10 +33,22 @@ class Header extends Component {
     });
   }
   render(){
+    const onSearch = (event) => {
+      this.props.handleSearch(event.target.value)
+    }
     return (
       <div>
         <Navbar  dark expand="md" className="mb-5 bg-theme-four">
-          <NavbarBrand href="/"> Poll Simple</NavbarBrand>
+          <NavbarBrand href="/"> Poll
+          <img
+              src={logo}
+              width="20"
+              height="20"
+              className="d-inline-block align-middle"
+              alt="React Bootstrap logo"
+            />
+
+           Simple</NavbarBrand>
           <NavbarToggler onClick={()=> this.toggle() } />
           <Collapse isOpen={ this.state.isOpen } navbar>
             <Nav className='mr-auto' navbar>
@@ -64,6 +80,19 @@ class Header extends Component {
             </Nav>
 
             <Nav className='ml-auto' navbar>
+
+              <Form className="d-flex mx-2">
+                <Input
+                  type="search"
+                  placeholder="Search"
+                  className="mr-2"
+                  aria-label="Search"
+                  value={this.props.search}
+                  onChange = { onSearch }
+                />
+                <Button className='bg-success'>Search</Button>
+              </Form>
+
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle className="nav-link" nav caret>
                   <FontAwesomeIcon icon={faUser} />
@@ -75,7 +104,7 @@ class Header extends Component {
                       {`Hi! ${this.props.user.user.username} Sign Out?`}
                     </DropdownItem>
                     <DropdownItem>
-                      <NavLink to='/signin'>
+                      <NavLink to={`profile/${this.props.user.user._id}`}>
                         Profile
                       </NavLink>
                     </DropdownItem>

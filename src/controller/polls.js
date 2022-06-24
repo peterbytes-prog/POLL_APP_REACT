@@ -18,7 +18,6 @@ export const Polls = (state = {
 }, action) =>{
   switch (action.type) {
     case (ActionTypes.FETCHED_POLLS):
-    console.log('payload', action.payload)
       return { ...state, isLoading:false, errMess:null, polls:action.payload}
     case (ActionTypes.FECTH_POLL_LOADING):
       return { ...state, isLoading:true, errMess:null, polls:[]};

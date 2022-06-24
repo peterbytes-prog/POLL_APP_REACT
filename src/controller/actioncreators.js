@@ -1,8 +1,6 @@
 import * as ActionTypes from './actiontypes';
 import fetch from 'cross-fetch';
 import { baseUrl } from '../shared/baseUrl';
-import { POLLS } from '../shared/polls';
-import { CATEGORIES } from '../shared/categories';
 
 
 const createVoteLoading = () =>{
@@ -41,7 +39,7 @@ export const createVote = (pollId, choiceId) => (dispatch) => {
       return response
     }else{
       let error = new Error('Error '+response.status);
-      error.response = response;
+      error.message = response;
       throw error;
     }
   }, err => {throw err})
@@ -90,7 +88,7 @@ export const createPoll = (data) => (dispatch) =>{
         return response
       }else{
         let error = new Error('Error '+response.status);
-        error.response = response;
+        error.message = response;
         throw error;
       }
   }, err =>{
@@ -104,7 +102,24 @@ export const createPoll = (data) => (dispatch) =>{
   .catch( err => dispatch(createPollFailed(err.message)))
 }
 
+export const requestDeletePoll = (pollId) => (dispatch) => {
+  dispatch(pollLoading(true));
+  const bearer = 'Bearer '+localStorage.getItem('token');
+  fetch(baseUrl + `polls/${pollId}`, {method: 'DELETE',
+      dataType: 'json',
+      body: JSON.stringify({'confirm': true}),
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json',
+        'Authorization': bearer
+      }})
+  .then(polls => polls.json())
+  .then(polls => {
+      return fecthPolls()(dispatch)
+    })
+  .catch(err => {alert(err.message); return fecthPolls()(dispatch)})
 
+}
 export const fecthPolls = () => (dispatch) =>{
   dispatch(pollLoading(true));
   fetch(baseUrl + 'polls', {method: 'GET',
@@ -115,7 +130,6 @@ export const fecthPolls = () => (dispatch) =>{
       }})
   .then(polls => polls.json())
   .then(polls => {
-    console.log('polls', polls, polls.length, polls[0])
       return dispatch(addPolls(polls))
     })
   .catch(err=>dispatch(loadPollsFailed(err.message)))
@@ -205,7 +219,7 @@ export const loginUser = ( creds ) => (dispatch) => {
         return response;
       }else{
         var error = new Error('Error '+response.status)
-        error.response = response;
+        error.message = response;
         throw error
       }
     }, error => {
@@ -221,7 +235,7 @@ export const loginUser = ( creds ) => (dispatch) => {
     }
     else{
         var error = new Error('Error '+ response.status);
-        error.response = response;
+        error.message = response;
         throw error;
     }
   })
@@ -274,7 +288,7 @@ export const signupUser = ( creds ) => ( dispatch ) => {
       return response;
     }else{
       let error = new Error('Error '+response.status);
-      error.response = response;
+      error.message = response;
       throw error;
     }
   }, err => {
@@ -286,7 +300,7 @@ export const signupUser = ( creds ) => ( dispatch ) => {
         dispatch(recieveSignup(response));
     }else{
       var error = new Error('Error '+ response.status);
-      error.response = response;
+      error.message = response;
       throw error;
     }
   })

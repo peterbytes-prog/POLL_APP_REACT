@@ -1,6 +1,6 @@
-import { USERS } from '../shared/users';
 
-export const Users = (state=USERS, action) =>{
+
+export const Users = (state=[], action) =>{
   switch (action.type) {
     default:
       return state;

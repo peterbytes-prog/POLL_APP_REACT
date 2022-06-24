@@ -109,7 +109,7 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
                 <Container>
                 <br></br>
                   <p className='h5 text-left'>More By {poll.user.username}</p>
-                  <RenderCardPolls polls={ pollUserSuggestion } categories = { categories}/>
+                  <RenderCardPolls user={user} polls={ pollUserSuggestion } categories = { categories}/>
                   <hr/>
                 </Container>
               ):(null)}
@@ -117,7 +117,7 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
                 <Container>
                 <br></br>
                   <p className='h5 text-secondary text-left'>Suggested Polls</p>
-                  <RenderCardPolls polls={ otherPolls } categories = { categories} />
+                  <RenderCardPolls polls={ otherPolls } categories = { categories} user={user} />
                 </Container>
               ):(null)}
 

@@ -7,11 +7,11 @@ import { getCategoryParentFromTree } from '../../logic.js';
 import Loading from '../loading';
 
 
-function PollListPage({polls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
+function PollListPage({polls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError, user}){
   const polls_list = polls.map(function(poll){
     return(
       <li style={{ border: 'none'}}className='list-group-item my-1' key={poll._id}>
-        <PollMediaCard poll={poll} categories={categories}/>
+        <PollMediaCard poll={poll} categories={categories} user={user}/>
       </li>
     )
   })

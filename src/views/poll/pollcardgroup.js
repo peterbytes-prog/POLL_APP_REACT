@@ -3,12 +3,12 @@ import { Card, CardGroup, CardFooter, CardBody } from 'reactstrap';
 import PollMediaCard from './pollcard';
 
 
-function RenderCardPolls({polls, limits, categories}){
+function RenderCardPolls({polls, limits, categories, user, onDeletePoll=false}){
   const poll_cards = polls.map((poll)=>{
     return (<Card style={{border:'none', minWidth:'15rem'}} className='m-1' key={poll._id}>
 
-              <PollMediaCard poll={poll} categories={categories} card={true}/>
-              
+              <PollMediaCard onDeletePoll={onDeletePoll} user={user} poll={poll} categories={categories} card={true}/>
+
             </Card>)
   })
   return (

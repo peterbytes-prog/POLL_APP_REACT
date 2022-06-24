@@ -24,3 +24,18 @@ export const getCategoryParentFromTree = ({findId, categories=[]}) =>{
   }
   return []
 }
+export const getCategoryChildren = (categories, categoryId) =>{
+  let category = categories.filter((c)=>c._id===categoryId)
+  if(category.length === 0){
+    return [];
+  }else{
+    category = category[0];
+  }
+  let coll = [];
+  coll.push(category._id);
+  for(let sub_category of category.subcategories){
+    let sub = getCategoryChildren(categories, sub_category);
+    coll = coll.concat(sub)
+  }
+  return coll
+}

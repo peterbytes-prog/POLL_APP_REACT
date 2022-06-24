@@ -1,10 +1,12 @@
 import React from 'react';
-import { Media, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Media, Breadcrumb, BreadcrumbItem, Button } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { getCategoryParentFromTree } from '../../logic.js';
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+const stateUrl = 'http://localhost:3000'
 
-function PollMediaCard({poll, categories}){
-
+function PollMediaCard({poll, categories, card, user, onDeletePoll }){
   const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
                                         return (<BreadcrumbItem key={category['_id']}>
@@ -12,16 +14,25 @@ function PollMediaCard({poll, categories}){
                                         </BreadcrumbItem>)
                                       });
 
+  let editable = ( ) => {
+    if(!onDeletePoll || !user.user){
+      return null
+    }
+    else if(poll.user._id === user.user._id){
+      return (<Button onClick={()=>onDeletePoll(poll._id)} className="p-0 bg-danger" style={{'position':'absolute', 'top':'1%', 'right':'1%','z-index':'0', 'width':'1.5rem', 'height':'1.5rem'}}><FontAwesomeIcon icon={faTrash}/></Button>)
+    }
+    return null;
+  }
   return (
 
       <Media style={{overflow:'hidden', width:'100%'}} className=' p-2 poll-detail'>
         <Media left>
-          <Media className='border rounded-circle border-dark' object src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210728124621/geekslogo.png" alt="cat" style={{width:'2em', height:'2em'}}>
+          <Media className='border rounded-circle border-dark' object src={`${stateUrl}/${poll.profile[0].image}`} alt="cat" style={{width:'2em', height:'2em'}}>
           </Media>
         </Media>
         <Media body className='px-2'>
           <div  className='text-left'>
-            <span className='text py-0'>{poll.user.username}</span><br></br>
+            <NavLink to={`/profile/${poll.user._id}`} className='text py-0'>{poll.profile[0].fullname}</NavLink><br></br>
             <span className='text py-0'>{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(poll.createdAt)))}</span>
           </div>
           <br></br>
@@ -44,6 +55,8 @@ function PollMediaCard({poll, categories}){
                   <p className='col-sm-11 offset-sm-1 col-md-5 text-sm-left text-md-right'>Votes : {poll.choices.reduce((prev, cur)=>prev + cur.votes.length, 0)} </p>
                 </div>
           </NavLink>
+
+          {editable()}
         </Media>
       </Media>
 

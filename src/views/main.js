@@ -9,8 +9,10 @@ import SignInPage from './user/login';
 import SignUpPage from './user/signup';
 import CreatePollPage from './poll/create';
 import Loading from './loading';
+import { getCategoryChildren } from '../logic';
 import PollDetailPage from './poll/detail';
-import { createVote, createPoll, fecthPolls, fecthCategories, logoutUser, loginUser, signupUser } from '../controller/actioncreators';
+import ProfilePage from './user/profile';
+import { createVote, createPoll, fecthPolls, fecthCategories, logoutUser, loginUser, signupUser, requestDeletePoll } from '../controller/actioncreators';
 
 
 import { connect } from 'react-redux';
@@ -45,7 +47,8 @@ const mapDispatchToProps = dispatch => ({
   fecthCategories: () => { dispatch(fecthCategories())},
   logoutUser: () => { dispatch(logoutUser())},
   loginUser: (creds) => { dispatch(loginUser(creds))},
-  signupUser: (creds) => { dispatch(signupUser(creds))}
+  signupUser: (creds) => { dispatch(signupUser(creds))},
+  requestDeletePoll: (pollId) => { dispatch(requestDeletePoll(pollId))}
 })
 function depthFirst2(cat){
   let ref =[];
@@ -80,15 +83,18 @@ function depthFirst(cat, _find, ind=0, found=null){
 class Main extends Component{
   constructor(props){
     super(props);
+    this.state = {
+      search: ""
+    }
+    this.handleSearch = this.handleSearch.bind(this)
   }
   componentDidUpdate(){
-    console.log(this.props.user)
+
     if(! this.props.user.isAuthenticated){
       return
     }
     const tokenExpired = new Date(this.props.user.expiresIn) < Date.now() ;
     if(tokenExpired){
-      console.log('will logout user');
       this.props.logoutUser()
     }
 
@@ -97,6 +103,11 @@ class Main extends Component{
     this.props.fecthCategories();
     this.props.fecthPolls();
 
+  }
+  handleSearch(val){
+    this.setState({
+      search: val
+    })
   }
   render(){
     const LoginRedirect = () => {
@@ -116,55 +127,51 @@ class Main extends Component{
     }
     const PollDetail = ({ match })=>{
       return (<PollDetailPage
+                user = {this.props.user}
                 polls={this.props.polls.polls}
                 pollId={match.params.pollId}
                  onVote={this.props.onVote}
                  categories={this.props.categories.categories}
                  pollsLoading = {this.props.polls.isLoading}
                  pollsErrMess = {this.props.polls.errMess}
-                 user = {this.props.user }
+
               />)
     }
 
     const PollCategory = ({ match }) =>{
-
-      let group = [];
-      for(let category of this.props.categories.categories){
-        let {found, ref} = depthFirst(category,match.params.categoryid, 0, null);
-        if(found){
-          group = depthFirst2(found);
-          break;
-        }
-      }
+      let group = getCategoryChildren(this.props.categories.categories, match.params.categoryid);
       let polls = this.props.polls.polls.filter((poll)=>group.includes(poll.category._id));
       return <PollListPage
-                  polls={polls}
+                  polls={polls.filter(poll=>poll.question_text.toLowerCase().includes(this.state.search.toLowerCase()))}
                   pollsLoading = {this.props.polls.isLoading}
                   pollsErrMess = {this.props.polls.errMess}
                   categories={this.props.categories.categories}
                   categoriesError = {this.props.categories.errMess}
                   categoriesLoading = {this.props.categories.isLoading}
+                  user = {this.props.user }
               />
     }
     return(
 
       <div>
-        <Header user={ this.props.user } logoutUser = {this.props.logoutUser} />
+        <Header user={ this.props.user } logoutUser = {this.props.logoutUser} search={ this.state.search } handleSearch={this.handleSearch}/>
           <Switch>
             <Route exact path='/' component={()=> <HomePage
-                                                            recentPolls = {recents(this.props.polls.polls)}
-                                                            popularPolls = {popular(this.props.polls.polls)}
-                                                            trendingPolls = {trending(this.props.polls.polls)}
+                                                            recentPolls = {recents(this.props.polls.polls).filter(poll=>poll.question_text.toLowerCase().includes(this.state.search.toLowerCase()))}
+                                                            popularPolls = {popular(this.props.polls.polls).filter(poll=>poll.question_text.toLowerCase().includes(this.state.search.toLowerCase()))}
+                                                            trendingPolls = {trending(this.props.polls.polls).filter(poll=>poll.question_text.toLowerCase().includes(this.state.search.toLowerCase()))}
                                                             pollsLoading = {this.props.polls.isLoading}
                                                             pollsErrMess = {this.props.polls.errMess}
                                                             categories={this.props.categories.categories}
                                                             categoriesError = {this.props.categories.errMess}
                                                             categoriesLoading = {this.props.categories.isLoading}
+                                                            user = {this.props.user}
                                                             />
                                               }
             />
             <Route exact path='/polls' component={()=> <PollListPage
-                                                            polls={this.props.polls.polls}
+                                                            user = {this.props.user}
+                                                            polls={this.props.polls.polls.filter(poll=>poll.question_text.toLowerCase().includes(this.state.search.toLowerCase()))}
                                                             pollsLoading = {this.props.polls.isLoading}
                                                             pollsErrMess = {this.props.polls.errMess}
                                                             categories={this.props.categories.categories}
@@ -173,6 +180,14 @@ class Main extends Component{
                                                         />
                                                   }
             />
+            <Route exact path='/profile/:userId' component = { ({match}) => <ProfilePage
+                                                                                user = {this.props.user}
+                                                                                onDeletePoll = { this.props.requestDeletePoll }
+                                                                                categories={this.props.categories.categories}
+                                                                                userId={match.params.userId}
+                                                                                polls={this.props.polls.polls}
+                                                                                pollsLoading = {this.props.polls.isLoading}
+                                                                              /> } />
             <Route exact path='/polls/create' component={ CreatePollLoginRedirect } />
             <Route path='/polls/category/:categoryid' component={ PollCategory } />
             <Route  path='/polls/:pollId' component={ PollDetail } />

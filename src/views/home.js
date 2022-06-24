@@ -9,7 +9,7 @@ import CategoryDropDown from './category/side_list';
 import Loading from './loading';
 
 
-function HomePage({recentPolls, popularPolls, trendingPolls, pollsLoading, pollsErrMess, categories, categoriesLoading, categoriesError}){
+function HomePage({recentPolls, popularPolls, trendingPolls, pollsLoading, pollsErrMess, categories, categoriesLoading, user, categoriesError}){
 
 
   return (
@@ -52,21 +52,21 @@ function HomePage({recentPolls, popularPolls, trendingPolls, pollsLoading, polls
                       <Container>
                       <br></br>
                         <p className='h5 text-left'>Trending Polls</p>
-                        <RenderCardPolls polls={trendingPolls} categories={ categories } />
+                        <RenderCardPolls user={user} polls={trendingPolls} categories={ categories } />
                         <hr/>
                       </Container>
 
                       <Container>
                       <br></br>
                         <p className='h5 text-left'>Recent Polls</p>
-                        <RenderCardPolls polls={recentPolls} categories={ categories } />
+                        <RenderCardPolls user={user} polls={recentPolls} categories={ categories } />
                         <hr/>
                       </Container>
 
                       <Container>
                       <br></br>
                         <p className='h5 text-secondary text-left'>Popular Polls</p>
-                        <RenderCardPolls polls={ popularPolls } categories={ categories }/>
+                        <RenderCardPolls user={user} polls={ popularPolls } categories={ categories }/>
                       </Container>
 
 

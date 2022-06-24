@@ -11,6 +11,14 @@
    width: 100%;
 } */
 
+.brandImage{
+  background-color: var(--theme-two);
+  padding: 0.1em !important;
+  width:10rem !important;
+  height: 10rem !important;
+  border-radius: 50%;
+
+}
 .card nav .breadcrumb{
   padding: 0  !important;
 }

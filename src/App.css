@@ -10,7 +10,12 @@
    bottom: 0;
    width: 100%;
 } */
-
+.section-header{
+  background-color: rgba(2,17,41,0.8);
+  color: white;
+  padding-right: 2px;
+  padding-left: 2px;
+}
 .brandImage{
   background-color: var(--theme-two);
   padding: 0.1em !important;

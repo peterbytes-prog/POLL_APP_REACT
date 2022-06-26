@@ -13,7 +13,7 @@ function RenderCardPolls({polls, limits, categories, user, onDeletePoll=false}){
   })
   return (
     <CardGroup>
-      { poll_cards }
+      { poll_cards.length>0?(poll_cards):(<p>No Poll Found</p>) }
     </CardGroup>
   )
 }

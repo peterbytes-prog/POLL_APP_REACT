@@ -51,21 +51,32 @@ function HomePage({recentPolls, popularPolls, trendingPolls, pollsLoading, polls
 
                       <Container>
                       <br></br>
-                        <p className='h5 text-left'>Trending Polls</p>
+                        <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                          <p className='h5 text-left'>Trending Polls</p>
+                          <Link to='/polls'>See More</Link>
+                        </div>
                         <RenderCardPolls user={user} polls={trendingPolls} categories={ categories } />
                         <hr/>
                       </Container>
 
                       <Container>
                       <br></br>
-                        <p className='h5 text-left'>Recent Polls</p>
+                        <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                          <p className='h5 text-left'>Recent Polls</p>
+                          <Link to='/polls'>See More</Link>
+                        </div>
+
                         <RenderCardPolls user={user} polls={recentPolls} categories={ categories } />
                         <hr/>
                       </Container>
 
                       <Container>
                       <br></br>
-                        <p className='h5 text-secondary text-left'>Popular Polls</p>
+                        <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                          <p className='h5 text-secondary text-left'>Popular Polls</p>
+                          <Link to='/polls'>See More</Link>
+                        </div>
+
                         <RenderCardPolls user={user} polls={ popularPolls } categories={ categories }/>
                       </Container>
 

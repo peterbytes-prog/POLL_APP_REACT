@@ -34,7 +34,7 @@ function RenderChoice({votes, choice, onVote, user}){
         <div style={{'borderRadius':'50%', width:'3em', height:'3em', 'display':'flex', ...opacity}} className='mr-2 border border-secondary'>
           <p style={{display:'block', margin:'auto'}}>{parseInt((choice.votes.length/votes)*100||0)}%</p>
         </div>
-        <div style={{...opacity}} onClick={ handleVote } className='border border-secondary d-flex'>
+        <div style={{...opacity, 'cursor':'pointer'}} onClick={ handleVote } className='border border-secondary d-flex'>
             <p style={{display:'block', margin:'auto'}}> { choice.choice_text }</p>
         </div>
       </div>
@@ -60,7 +60,7 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
   const otherPolls = polls.filter((poll,ind)=>{
     if((ind!== pollIndex)&&(!pollUserSuggestion.includes(poll))){ return poll}
     return null;
-  });
+  }).splice(0,4);
 
   const categoryParentsList = getCategoryParentFromTree({findId:poll.category._id, categories:categories})
                                 .map((category)=>{
@@ -108,7 +108,11 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
               {pollUserSuggestion.length>0 ?(
                 <Container>
                 <br></br>
-                  <p className='h5 text-left'>More By {poll.user.username}</p>
+                  <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                    <p className='h5 text-left'>More By {poll.user.username}</p>
+                    <Link to='/polls'>See More</Link>
+                  </div>
+
                   <RenderCardPolls user={user} polls={ pollUserSuggestion } categories = { categories}/>
                   <hr/>
                 </Container>
@@ -116,7 +120,11 @@ function PollDetailPage({polls, pollId, onVote, categories, pollsLoading, pollsE
               {otherPolls.length>0 ?(
                 <Container>
                 <br></br>
-                  <p className='h5 text-secondary text-left'>Suggested Polls</p>
+                  <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                    <p className='h5 text-secondary text-left'>Suggested Polls</p>
+                    <Link to='/polls'>See More</Link>
+                  </div>
+
                   <RenderCardPolls polls={ otherPolls } categories = { categories} user={user} />
                 </Container>
               ):(null)}

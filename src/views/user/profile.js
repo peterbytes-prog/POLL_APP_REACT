@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import fetch from 'cross-fetch';
 import { baseUrl } from '../../shared/baseUrl';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Container, Form, Label, Input, FormFeedback, FormGroup } from 'reactstrap';
 import Loading from '../loading';
 import RenderCardPolls from '../poll/pollcardgroup';
@@ -259,11 +259,15 @@ class ProfilePage extends Component{
 
                         <Container>
                         <br></br>
+                        <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
                           <p className='h5 text-left'>Created Polls</p>
+                          <Link to='/polls'>See More</Link>
+                        </div>
+
                           <RenderCardPolls
                                       onDeletePoll = {this.props.onDeletePoll}
                                       user= {this.props.user }
-                                      polls={ userPolls}
+                                      polls={ userPolls.splice(0,4)}
                                       categories={ this.props.categories }
                           />
                           <hr/>
@@ -271,11 +275,15 @@ class ProfilePage extends Component{
 
                         <Container>
                         <br></br>
-                          <p className='h5 text-left'>Recent Vote</p>
+
+                          <div className='section-header d-flex justify-content-sm-start justify-content-md-between'>
+                            <p className='h5 text-left'>Recent Vote</p>
+                            <Link to='/polls'>See More</Link>
+                          </div>
                           <RenderCardPolls
                                 onDeletePoll = {this.props.onDeletePoll}
                                 user = {this.props.user }
-                                polls={ votedPolls }
+                                polls={ votedPolls.splice(0,4) }
                                 categories={ this.props.categories }
                           />
                           <hr/>
